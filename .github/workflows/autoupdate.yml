@@ -1,13 +1,10 @@
 name: autoupdate
 
+# GitHub Actions cannot subscribe to another repo's `release` events, so this
+# polls upstream: every 6 hours, plus manual trigger.
 on:
-  # instant bump when upstream publishes a stable release
-  # (prereleases never fire `published`, only `released`)
-  release:
-    types: [published]
-  # safety net in case an event is missed
   schedule:
-    - cron: "37 5 * * *"
+    - cron: "17 */6 * * *"
   workflow_dispatch:
 
 permissions:
@@ -15,7 +12,6 @@ permissions:
 
 jobs:
   bump-manifest:
-    if: github.event_name != 'release' || startsWith(github.event.release.tag_name, 'v')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
