@@ -3,9 +3,6 @@
 ._*
 page.html
 checkver-*.html
-
 # kicre: global gitignore has ".*/" — keep repo dot-dirs trackable
 !.github/
 !.github/**
-!.vscode/
-!.vscode/**
