@@ -1,2 +1,6 @@
 __pycache__/
 *.pyc
+
+# repo must ship its CI despite global gitignore ".*/" rules
+!.github/
+!.github/**

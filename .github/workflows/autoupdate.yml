@@ -1,0 +1,39 @@
+name: autoupdate
+
+on:
+  # instant bump when upstream publishes a stable release
+  # (prereleases never fire `published`, only `released`)
+  release:
+    types: [published]
+  # safety net in case an event is missed
+  schedule:
+    - cron: "37 5 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  bump-manifest:
+    if: github.event_name != 'release' || startsWith(github.event.release.tag_name, 'v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Bump manifest to latest stable release
+        env:
+          GITHUB_TOKEN: *** secrets.GITHUB_TOKEN }}
+        run: python3 scripts/autoupdate.py
+
+      - name: Commit and push if changed
+        run: |
+          if git diff --quiet bucket/; then
+            echo "manifest already up to date"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          version=$(python3 -c "import json;print(json.load(open('bucket/sing-box-reF1nd.json'))['version'])")
+          git add bucket/
+          git commit -m "sing-box-reF1nd: update to ${version} [skip ci]"
+          git push
