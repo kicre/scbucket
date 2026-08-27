@@ -1,6 +1,11 @@
-__pycache__/
-*.pyc
+*.sublime-workspace
+*~
+._*
+page.html
+checkver-*.html
 
-# repo must ship its CI despite global gitignore ".*/" rules
+# kicre: global gitignore has ".*/" — keep repo dot-dirs trackable
 !.github/
 !.github/**
+!.vscode/
+!.vscode/**
